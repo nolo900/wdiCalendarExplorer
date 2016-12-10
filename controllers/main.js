@@ -8,8 +8,10 @@ controller.homePage = function(req,res){
 	});
 };
 
-
-
+controller.loginPage = function (req, res) {
+	res.render('./partials/accessForms/login', {
+	});
+};
 
 module.exports = controller;
 
