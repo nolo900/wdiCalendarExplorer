@@ -1,8 +1,13 @@
 body{
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  padding: 1%;
 }
 
-a{
-  color: #00B7FF;
+.nav-wrapper{
+  background-color: #455A64;
 }
+
+$breakpoint-mobile-nav: 994px;
+@media (min-width: $breakpoint-mobile-nav) {
+  .brand-logo{ margin-left: 25px;}
+}
+
