@@ -9,8 +9,11 @@ controller.homePage = function(req,res){
 };
 
 controller.loginPage = function (req, res) {
-	res.render('./partials/accessForms/login', {
-	});
+	res.render('./partials/accessForms/login', {});
+};
+
+controller.signupPage = function (req, res) {
+	res.render('./partials/accessForms/signup', {})
 };
 
 module.exports = controller;
