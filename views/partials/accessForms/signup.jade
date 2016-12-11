@@ -1,0 +1,23 @@
+extends ../../layout
+
+block content
+
+    h3.center-align Signup
+    .divider.form-divider
+    .row
+        form.col.s6.offset-s3
+            .row
+                .input-field.col.s12
+                    input(type="email")#signup_email.validate
+                    label(for="signup_email") Email
+            .row
+                .input-field.col.s12
+                    input(type="password")#signup_password.validate
+                    label(for="signup_password") Password
+            .row
+                .input-field.col.s12
+                    input(type="password")#signup_password2.validate
+                    label(for="signup_password2") Confirm Password
+            .row.center-align
+                button.btn.waves-effect.waves-light(type="submit" name="action") Go!
+                    i.material-icons.right send
