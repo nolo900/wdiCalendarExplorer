@@ -26,7 +26,18 @@ nav
         -   }
 
 
-
+.flash.row.center-align
+- if (typeof message !== 'undefined') {
+    - if (typeof message.error !== 'undefined' && message.error.length > 0) {
+        .card-panel.red= message.error
+    - }
+    - if (typeof message.info !== 'undefined' && message.info.length > 0) {
+        .card-panel.blue= message.info
+    - }
+    - if (typeof message.success !== 'undefined' && message.success.length > 0) {
+        .card-panel.green= message.success
+    - }
+- }
 
 
 
