@@ -5,7 +5,7 @@ block content
     h3.center-align Signup
     .divider.form-divider
     .row
-        form#signupForm.col.s6.offset-s3
+        form#signupForm.col.s6.offset-s3(method="POST" action="/signup")
             .row
                 .input-field.col.s12
                     input(type="email" name="signup_email")#signup_email.validate
@@ -16,8 +16,8 @@ block content
                     label(for="signup_password") Password
             .row
                 .input-field.col.s12
-                    input(type="password" name="signup_password2")#signup_password2.validate
+                    input(type="password")#signup_password2.validate
                     label(for="signup_password2") Confirm Password
             .row.center-align
-                button.btn.waves-effect.waves-light(type="submit" name="submitSignin") Go!
+                button.btn.waves-effect.waves-light(type="submit") Go!
                     i.material-icons.right send

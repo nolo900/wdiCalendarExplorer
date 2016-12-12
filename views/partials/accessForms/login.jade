@@ -5,17 +5,17 @@ block content
     h3.center-align Login
     .divider.form-divider
     .row
-        form.col.s6.offset-s3
+        form#loginForm(method="post" action="/events").col.s6.offset-s3
             .row
                 .input-field.col.s12
-                    input(type="email")#login_email.validate
+                    input(type="email" name="login_email")#login_email.validate
                     label(for="login_email") Email
             .row
                 .input-field.col.s12
-                    input(type="password")#login_password.validate
+                    input(type="password" name="login_password")#login_password.validate
                     label(for="login_password") Password
             .row.center-align
-                button.btn.waves-effect.waves-light(type="submit" name="action") Go!
+                button.btn.waves-effect.waves-light(type="submit" name="submitLogin") Go!
                     i.material-icons.right send
 
             .row.center-align
