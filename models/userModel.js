@@ -20,7 +20,7 @@ UserSchema.methods.encrypt = function(password) {
 
 // compare entered password(after hashing) to previously stored hash
 UserSchema.methods.isValidPassword = function (password) {
-	return bcrypt.compareSync(password,this.password);
+	return bcrypt.compareSync(password,this.local.password);
 };
 
 module.exports = mongoose.model('User',UserSchema);

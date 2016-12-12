@@ -15,6 +15,16 @@ controller.loginPage = function (req, res) {
 	});
 };
 
+controller.loginUser = function (req, res, next) {
+	var loginStrategy = passport.authenticate('local-login', {
+		successRedirect : '/events',
+		failureRedirect : '/login',
+		failureFlash: true
+	});
+
+	return loginStrategy(req,res,next);
+}
+
 controller.signupPage = function (req, res) {
 	res.render('./partials/accessForms/signup', {})
 };

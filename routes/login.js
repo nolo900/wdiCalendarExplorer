@@ -7,4 +7,8 @@ router.get('/', function (req, res, next) {
 	controller.loginPage(req,res);
 });
 
+router.post('/', function (req, res, next) {
+	controller.loginUser(req,res,next);
+})
+
 module.exports = router;
