@@ -7,4 +7,9 @@ router.get('/', function (req, res, next) {
 	controller.signupPage(req,res);
 });
 
+// POST to Signup page
+router.post('/', function (req, res, next) {
+	controller.signupUser(req,res,next);
+})
+
 module.exports = router;

@@ -1,3 +1,4 @@
+var passport = require('passport');
 var controller = {};
 
 controller.homePage = function(req,res){
@@ -9,11 +10,23 @@ controller.homePage = function(req,res){
 };
 
 controller.loginPage = function (req, res) {
-	res.render('./partials/accessForms/login', {});
+	res.render('./partials/accessForms/login', {
+		message: req.flash()
+	});
 };
 
 controller.signupPage = function (req, res) {
 	res.render('./partials/accessForms/signup', {})
+};
+
+controller.signupUser = function (req, res, next) {
+	var signUpStrategy = passport.authenticate('local-signup', {
+		successRedirect: '/events',
+		failureRedirect : '/signup',
+		failureFlash : true
+	});
+
+	return signUpStrategy(req,res,next);
 };
 
 module.exports = controller;

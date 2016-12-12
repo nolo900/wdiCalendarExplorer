@@ -30,5 +30,27 @@ $( document ).ready(function(){
 
 	});
 
+	$("#loginForm").validate({
+		rules:  {
+
+			login_email:  {
+				required: true,
+				email: true
+			},
+			login_password: {
+				required: true
+			}
+		},
+		errorElement : 'div',
+		errorPlacement: function(error, element) {
+			var placement = $(element).data('error');
+			if (placement) {
+				$(placement).append(error)
+			} else {
+				error.insertAfter(element);
+			}
+		}
+
+	});
 
 })
