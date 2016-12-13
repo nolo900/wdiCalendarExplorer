@@ -1,41 +1,44 @@
+.navbar-fixed
+    nav
+        .nav-wrapper
+            a(href="/events").brand-logo WDI Lesson Saver
+            a(href="#" data-activates="nav-mobile").button-collapse
+                i.material-icons menu
 
-nav
-    .nav-wrapper
-        a(href="/").brand-logo WDI Lesson Saver
-        a(href="#" data-activates="nav-mobile").button-collapse
-            i.material-icons menu
+            - if (currentUser) {
 
-        - if (currentUser) {
+            ul.right.hide-on-med-and-down
+                li: a=currentUser.local.email
+                li: a(href="/logout") Logout
+            ul#nav-mobile.side-nav
+                li: a=currentUser.local.email
+                li: a(href="/events") Logout
 
-        ul.right.hide-on-med-and-down
-            li: a=currentUser.local.email
-            li: a(href="/logout") Logout
-        ul#nav-mobile.side-nav
-            li: a=currentUser.local.email
-            li: a(href="/events") Logout
+            -   } else {
 
-        -   } else {
+            ul.right.hide-on-med-and-down
+                li: a(href="/login") Login
+                li: a(href="/signup") Signup
+            ul#nav-mobile.side-nav
+                li: a(href="/login") Login
+                li: a(href="/signup") Signup
 
-        ul.right.hide-on-med-and-down
-            li: a(href="/login") Login
-            li: a(href="/signup") Signup
-        ul#nav-mobile.side-nav
-            li: a(href="/login") Login
-            li: a(href="/signup") Signup
-
-        -   }
+            -   }
 
 
-.flash.row.center-align
+.flash
 - if (typeof message !== 'undefined') {
     - if (typeof message.error !== 'undefined' && message.error.length > 0) {
-        .card-panel.red= message.error
+        .card-panel.red.center-align
+            h5(style="color:white;")= message.error
     - }
     - if (typeof message.info !== 'undefined' && message.info.length > 0) {
-        .card-panel.blue= message.info
+        .card-panel.blue.center-align
+            h5(style="color:white;")= message.info
     - }
     - if (typeof message.success !== 'undefined' && message.success.length > 0) {
-        .card-panel.green= message.success
+        .card-panel.green.center-align
+            h5(style="color:white;")= message.success
     - }
 - }
 
