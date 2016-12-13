@@ -1,4 +1,6 @@
 var passport = require('passport');
+var mongoose = require('mongoose');
+// need to somehow pull in list of events from database,
 var controller = {};
 
 controller.homePage = function(req,res){
@@ -37,6 +39,10 @@ controller.signupUser = function (req, res, next) {
 	});
 
 	return signUpStrategy(req,res,next);
+};
+
+controller.showEvents = function(req,res){
+	res.render('./partials/eventsSelector', {});
 };
 
 module.exports = controller;
