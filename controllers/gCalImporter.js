@@ -6,6 +6,9 @@
 	var googleAuth = require('google-auth-library');
 	var calID = "generalassemb.ly_003glv5s4t3ak7p01s6s62pcj4@group.calendar.google.com";
 
+	var mongoose = require('mongoose');
+	var Event = require('../models/eventModel');
+
 	// If modifying these scopes, delete your previously saved credentials
 	// at ~/.credentials/calendar-nodejs-quickstart.json
 	var SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
@@ -24,8 +27,10 @@
 				}
 				// Authorize a client with the loaded credentials, then call the
 				// Google Calendar API.
-				this.authorize(JSON.parse(content), this.listEvents);
-				// this.authorize(JSON.parse(content), updateCalendarEvent);
+
+				//this.authorize(JSON.parse(content), this.listEvents);
+				//this.authorize(JSON.parse(content), this.updateCalendarEvent);
+				this.authorize(JSON.parse(content), this.pushGCalEventsToDB);
 			})
 		},
 
@@ -114,8 +119,10 @@
 			calendar.events.list({
 				auth: auth,
 				calendarId: calID,
-				timeMin: (new Date()).toISOString(),
-				maxResults: 10,
+				//timeMin: (new Date()).toISOString(),
+				timeMin: '2016-10-31T00:00:00-05:00',
+				timeMax: '2017-03-01T00:00:00-05:00',
+				// maxResults: 100,
 				singleEvents: true,
 				orderBy: 'startTime'
 			}, (err, response) => {
@@ -127,15 +134,78 @@
 				if (events.length == 0) {
 					console.log('No upcoming events found.');
 				} else {
-					console.log('Upcoming 10 events:');
+					console.log('Found Events:');
 					for (var i = 0; i < events.length; i++) {
 						var event = events[i];
 						var start = event.start.dateTime || event.start.date;
-						console.log('%s - %s', start, event.summary);
+						console.log('%s - %s - %s',
+									start,
+									event.summary,
+									event.description,
+									event.id
+						);
 					}
 				}
 			});
+		},
+
+		pushGCalEventsToDB: function(auth){
+			var calendar = google.calendar('v3');
+			calendar.events.list({
+				auth: auth,
+				calendarId: calID,
+				//timeMin: (new Date()).toISOString(),
+				timeMin: '2016-10-31T00:00:00-05:00',
+				timeMax: '2017-03-01T00:00:00-05:00',
+				// maxResults: 100,
+				singleEvents: true,
+				orderBy: 'startTime'
+			}, (err, response) => {
+				if (err) {
+					console.log('Can\'t push events to DB, The API returned an error: ' + err);
+					return;
+				}
+				var events = response.items;
+				if (events.length == 0) {
+					console.log('Can\'t push events to DB, No upcoming events found.');
+				} else {
+
+					Event.remove({},function(){
+						console.log("All Events Deleted...");
+
+						console.log('Saving Events in DB...');
+						for (var i = 0; i < events.length; i++) {
+							var event = events[i];
+							console.log('Saving: ', i, event.id);
+							var dbCalEvent = new Event({
+								gCalEventId: event.id,
+								title: event.summary,
+								dateTime: event.start.dateTime || event.start.date,
+								description: event.description,
+								eventLink: event.htmlLink
+
+							});
+
+							dbCalEvent.save();
+
+							// dbCalEvent.create({
+							// 	gCalEventId: event.id,
+							// 	title: event.summary, //{type: String, required: true},
+							// 	dateTime: event.start.dateTime || event.start.date //{ type: Date, required: true}
+							// 	//dbCalEvent.description: { type: String },
+							// 	//dbCalEvent.eventLink: {type: String},
+							// 	//dbCalEvent.extractedlinks: {type: Array}
+							// }, function(err){
+							// 	if (err) console.log(err);
+							// } );
+						}
+
+					});
+
+				}
+			});
 		}
+
 	}
 
 
