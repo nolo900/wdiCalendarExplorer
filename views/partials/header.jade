@@ -1,29 +1,29 @@
-.navbar-fixed
-    nav
-        .nav-wrapper
-            a(href="/events").brand-logo WDI Lesson Saver
-            a(href="#" data-activates="nav-mobile").button-collapse
-                i.material-icons menu
 
-            - if (currentUser) {
+nav
+    .nav-wrapper
+        a(href="/events").brand-logo WDI Lesson Saver
+        a(href="#" data-activates="nav-mobile").button-collapse
+            i.material-icons menu
 
-            ul.right.hide-on-med-and-down
-                li: a=currentUser.local.email
-                li: a(href="/logout") Logout
-            ul#nav-mobile.side-nav
-                li: a=currentUser.local.email
-                li: a(href="/events") Logout
+        - if (currentUser) {
 
-            -   } else {
+        ul.right.hide-on-med-and-down
+            li: a=currentUser.local.email
+            li: a(href="/logout") Logout
+        ul#nav-mobile.side-nav
+            li: a=currentUser.local.email
+            li: a(href="/events") Logout
 
-            ul.right.hide-on-med-and-down
-                li: a(href="/login") Login
-                li: a(href="/signup") Signup
-            ul#nav-mobile.side-nav
-                li: a(href="/login") Login
-                li: a(href="/signup") Signup
+        -   } else {
 
-            -   }
+        ul.right.hide-on-med-and-down
+            li: a(href="/login") Login
+            li: a(href="/signup") Signup
+        ul#nav-mobile.side-nav
+            li: a(href="/login") Login
+            li: a(href="/signup") Signup
+
+        -   }
 
 
 .flash
