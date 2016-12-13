@@ -6,7 +6,7 @@ let EventSchema = new mongoose.Schema({
 	dateTime: { type: Date, required: true},
 	description: { type: String },
 	eventLink: {type: String},
-	extractedlinks: {type: Array},
+	extractedlinks: {type: Array}
 
 	//user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 },{
