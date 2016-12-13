@@ -4,8 +4,6 @@
 	var readline = require('readline');
 	var google = require('googleapis');
 	var googleAuth = require('google-auth-library');
-	// var newTitle = process.argv[3];
-	// var eventID = process.argv[2];
 	var calID = "generalassemb.ly_003glv5s4t3ak7p01s6s62pcj4@group.calendar.google.com";
 
 	// If modifying these scopes, delete your previously saved credentials
@@ -19,7 +17,7 @@
 
 		importEvents: function() {
 			// Load client secrets from a local file.
-			fs.readFile('client_secret.json', function processClientSecrets(err, content) {
+			fs.readFile('client_secret.json', (err, content) => {
 				if (err) {
 					console.log('Error loading client secret file: ' + err);
 					return;
@@ -46,7 +44,7 @@
 			var oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
 
 			// Check if we have previously stored a token.
-			fs.readFile(TOKEN_PATH, function (err, token) {
+			fs.readFile(TOKEN_PATH, (err, token)  => {
 
 				if (err) {
 					this.getNewToken(oauth2Client, callback);
@@ -75,9 +73,9 @@
 				input: process.stdin,
 				output: process.stdout
 			});
-			rl.question('Enter the code from that page here: ', function (code) {
+			rl.question('Enter the code from that page here: ', (code) => {
 				rl.close();
-				oauth2Client.getToken(code, function (err, token) {
+				oauth2Client.getToken(code, (err, token) => {
 					if (err) {
 						console.log('Error while trying to retrieve access token', err);
 						return;
@@ -120,7 +118,7 @@
 				maxResults: 10,
 				singleEvents: true,
 				orderBy: 'startTime'
-			}, function (err, response) {
+			}, (err, response) => {
 				if (err) {
 					console.log('The API returned an error: ' + err);
 					return;
