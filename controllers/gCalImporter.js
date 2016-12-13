@@ -177,13 +177,21 @@
 						for (var i = 0; i < events.length; i++) {
 							var event = events[i];
 							console.log('Saving: ', i, event.id);
+
+							if (event.description){
+								var links = event.description.match(/(([htps]+:)\/{2}(([\w\d\.]+):([\w\d\.]+))?@?(([a-zA-Z0-9\.\-_]+)(?::(\d{1,5}))?))?(\/(?:[a-zA-Z0-9\.\-\/\+\%]+)?)(?:\?([a-zA-Z0-9=%\-_\.\*&;]+))?(?:#([a-zA-Z0-9\-=,&%;\/\\"'\?]+)?)?/g);
+							} else {
+								var links = null;
+							}
+
+							//console.log(links);
 							var dbCalEvent = new Event({
 								gCalEventId: event.id,
 								title: event.summary,
 								dateTime: event.start.dateTime || event.start.date,
 								description: event.description,
-								eventLink: event.htmlLink
-
+								eventLink: event.htmlLink,
+								extractedlinks: links
 							});
 
 							dbCalEvent.save();
