@@ -9,9 +9,11 @@ nav
 
         ul.right.hide-on-med-and-down
             li: a=currentUser.local.email
+            li: a(href="/users") Favorites
             li: a(href="/logout") Logout
         ul#nav-mobile.side-nav
             li: a=currentUser.local.email
+            li: a(href="/users") Favorites
             li: a(href="/logout") Logout
 
         -   } else {

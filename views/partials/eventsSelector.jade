@@ -14,12 +14,14 @@ block content
         //tbody#eventsTable
         each item in Events
             - var links = item.extractedlinks
-            tr(id=item.gCalEventId)
-                td= item.dateTime
+            - var date = item.dateTime.getMonth()+1 + "-" + item.dateTime.getDate() + "-" + item.dateTime.getFullYear();
+            tr(id=item.id)
+                td= date
                 td= item.title
                 td: a(href=item.eventLink target="_blank") Event URL
                 td
                     each n in links
                         a(href=n)=n
                         br
-                td: i.material-icons library_add
+                td: form(action="/events/" + item.id method='POST')
+                    button(type="submit"):  i.material-icons library_add

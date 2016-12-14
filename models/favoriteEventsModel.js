@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
+const Event = require('./eventModel');
+const User = require('./userModel');
 
-let FavoriteEventSchema = new mongoose.Schema({
-	user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+let Schema = new mongoose.Schema({
+	user: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
 	event: {type: mongoose.Schema.Types.ObjectId, ref: 'Event', required: true},
-
 	comment: { type: String }
 },
 	{
@@ -11,4 +12,4 @@ let FavoriteEventSchema = new mongoose.Schema({
 	}
 );
 
-module.exports = mongoose.model('')
+module.exports = mongoose.model('Favorite',Schema);

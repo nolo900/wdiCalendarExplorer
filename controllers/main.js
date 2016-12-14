@@ -1,7 +1,8 @@
 var passport = require('passport');
 var mongoose = require('mongoose');
 var Event = require('../models/eventModel');
-// need to somehow pull in list of events from database,
+var Favorite = require('../models/favoriteEventsModel');
+
 var controller = {};
 
 controller.homePage = function(req,res){
@@ -51,6 +52,50 @@ controller.showEvents = function(req,res,next){
 			next(err);
 		});
 };
+
+controller.showUserEvents = function (req, res, next) {
+	console.log(global.currentUser.id);
+
+	Favorite.find({user: global.currentUser.id}).populate("event")
+		.then(function (foundFavorites) {
+			console.log(foundFavorites);
+			res.render('./partials/usersEvents', {Favorites: foundFavorites});
+		})
+		.catch(function (err) {
+			next(err);
+		})
+
+};
+
+controller.saveEvent = function (req, res, next) {
+	let fav = new Favorite({
+		user: currentUser.id,
+		event: req.params.id,
+	});
+
+	fav.save()
+		.then(function (saved) {
+			res.redirect('/users');
+		})
+		.catch(function (err) {
+			next(err);
+		});
+
+};
+
+
+// var todo = new Todo({
+// 	user:      currentUser,
+// 	title:     req.body.title,
+// 	completed: req.body.completed ? true : false
+// });
+// todo.save()
+// 	.then(function(saved) {
+// 		res.redirect('/todos');
+// 	})
+// 	.catch(function(err) {
+// 		return next(err);
+// 	});
 
 module.exports = controller;
 

@@ -1,0 +1,27 @@
+extends ../layout
+
+
+block content
+
+    table.bordered
+        thead
+            tr
+                th(data-field="") Date
+                th(data-field="") Course Title
+                th(data-field="") GCal Link
+                th(data-field="") Extracted Links
+                th
+        //tbody#eventsTable
+        each item in Favorites
+            - var links = item.event.extractedlinks
+            - var date = item.event.dateTime.getMonth()+1 + "-" + item.event.dateTime.getDate() + "-" + item.event.dateTime.getFullYear();
+            tr(id=item.event.gCalEventId)
+                td= date
+                td= item.event.title
+                td: a(href=item.event.eventLink target="_blank") Event URL
+                td
+                    each n in links
+                        a(href=n)=n
+                        br
+                td: a(href="#" + item.event.gCalEventId)
+                    i.material-icons remove
