@@ -8,14 +8,18 @@ block content
             tr
                 th(data-field="") Date
                 th(data-field="") Course Title
-                th(data-field="") Github Link
-        tbody#eventsTable
-            tr
-                td 2016-08-30
-                td Intro to CSS
-                td: a(href="#") http://www.github.com/nolo900
+                th(data-field="") GCal Link
+                th(data-field="") Extracted Links
+                th
+        //tbody#eventsTable
+        each item in Events
+            - var links = item.extractedlinks
+            tr(id=item.gCalEventId)
+                td= item.dateTime
+                td= item.title
+                td: a(href=item.eventLink target="_blank") Event URL
+                td
+                    each n in links
+                        a(href=n)=n
+                        br
                 td: i.material-icons library_add
-
-            tr
-                td= Events[0].title
-                td= Events[0].extractedlinks

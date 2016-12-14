@@ -176,36 +176,25 @@
 						console.log('Saving Events in DB...');
 						for (var i = 0; i < events.length; i++) {
 							var event = events[i];
+							//if event has a desc that contains a link then save it in the database
 							console.log('Saving: ', i, event.id);
 
-							if (event.description){
+							if(event.description && event.description.match(/(([htps]+:)\/{2}(([\w\d\.]+):([\w\d\.]+))?@?(([a-zA-Z0-9\.\-_]+)(?::(\d{1,5}))?))?(\/(?:[a-zA-Z0-9\.\-\/\+\%]+)?)(?:\?([a-zA-Z0-9=%\-_\.\*&;]+))?(?:#([a-zA-Z0-9\-=,&%;\/\\"'\?]+)?)?/g)){
+								console.log('Saving: ', i, event.id);
 								var links = event.description.match(/(([htps]+:)\/{2}(([\w\d\.]+):([\w\d\.]+))?@?(([a-zA-Z0-9\.\-_]+)(?::(\d{1,5}))?))?(\/(?:[a-zA-Z0-9\.\-\/\+\%]+)?)(?:\?([a-zA-Z0-9=%\-_\.\*&;]+))?(?:#([a-zA-Z0-9\-=,&%;\/\\"'\?]+)?)?/g);
-							} else {
-								var links = null;
+
+								var dbCalEvent = new Event({
+									gCalEventId: event.id,
+									title: event.summary,
+									dateTime: event.start.dateTime || event.start.date,
+									description: event.description,
+									eventLink: event.htmlLink,
+									extractedlinks: links
+								});
+
+								dbCalEvent.save();
 							}
 
-							//console.log(links);
-							var dbCalEvent = new Event({
-								gCalEventId: event.id,
-								title: event.summary,
-								dateTime: event.start.dateTime || event.start.date,
-								description: event.description,
-								eventLink: event.htmlLink,
-								extractedlinks: links
-							});
-
-							dbCalEvent.save();
-
-							// dbCalEvent.create({
-							// 	gCalEventId: event.id,
-							// 	title: event.summary, //{type: String, required: true},
-							// 	dateTime: event.start.dateTime || event.start.date //{ type: Date, required: true}
-							// 	//dbCalEvent.description: { type: String },
-							// 	//dbCalEvent.eventLink: {type: String},
-							// 	//dbCalEvent.extractedlinks: {type: Array}
-							// }, function(err){
-							// 	if (err) console.log(err);
-							// } );
 						}
 
 					});
