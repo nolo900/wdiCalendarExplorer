@@ -58,7 +58,6 @@ controller.showUserEvents = function (req, res, next) {
 
 	Favorite.find({user: global.currentUser.id}).populate("event")
 		.then(function (foundFavorites) {
-			console.log(foundFavorites);
 			res.render('./partials/usersEvents', {Favorites: foundFavorites});
 		})
 		.catch(function (err) {
@@ -83,19 +82,18 @@ controller.saveEvent = function (req, res, next) {
 
 };
 
-
-// var todo = new Todo({
-// 	user:      currentUser,
-// 	title:     req.body.title,
-// 	completed: req.body.completed ? true : false
-// });
-// todo.save()
-// 	.then(function(saved) {
-// 		res.redirect('/todos');
-// 	})
-// 	.catch(function(err) {
-// 		return next(err);
-// 	});
+controller.deleteFavoriteEvent = function(req,res,next){
+	console.log('B. about to delete favorite with id:', req.params.id);
+	Favorite.find({user: global.currentUser.id, event: req.params.id})
+		.then(function (foundFavorites) {
+			console.log("Event about to be deleted: ", foundFavorites);
+			res.redirect('/events');
+			//res.render('./partials/usersEvents', {Favorites: foundFavorites});
+		})
+		.catch(function (err) {
+			next(err);
+		});
+};
 
 module.exports = controller;
 
