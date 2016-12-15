@@ -21,28 +21,23 @@
 
 		importEvents: function() {
 
-			//Load client secrets from a local file.
-			// fs.readFile('client_secret.json', (err, content) => {
-			// 	if (err) {
-			// 		console.log('Error loading local client secret file: ' + err);
-			// 		return;
-			// 	}
-			// 	// Authorize a client with the loaded credentials, then call the
-			// 	// Google Calendar API.
-			//
-			// 	//this.authorize(JSON.parse(content), this.listEvents);
-			// 	//this.authorize(JSON.parse(content), this.updateCalendarEvent);
-			// 	this.authorize(JSON.parse(content), this.pushGCalEventsToDB);
-			// })
+			if (process.env.GCAL_CLIENT_SECRET){
+				this.authorize(JSON.parse(process.env.GCAL_CLIENT_SECRET), this.pushGCalEventsToDB);
+			} else {
+				//Load client secrets from a local file.
+				fs.readFile('client_secret.json', (err, content) => {
+					if (err) {
+						console.log('Error loading local client secret file: ' + err);
+						return;
+					}
+					// Authorize a client with the loaded credentials, then call the
+					// Google Calendar API.
 
-
-
-
-			this.authorize(JSON.parse(process.env.GCAL_CLIENT_SECRET), this.pushGCalEventsToDB);
-
-
-
-
+					//this.authorize(JSON.parse(content), this.listEvents);
+					//this.authorize(JSON.parse(content), this.updateCalendarEvent);
+					this.authorize(JSON.parse(content), this.pushGCalEventsToDB);
+				})
+			}
 
 		},
 
