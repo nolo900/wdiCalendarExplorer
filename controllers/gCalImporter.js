@@ -61,15 +61,21 @@
 			var oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
 
 			// Check if we have previously stored a token.
-			fs.readFile(TOKEN_PATH, (err, token)  => {
+			if (process.env.GCAL_TOKEN) {
+				oauth2Client.credentials = JSON.parse(process.env.GCAL_TOKEN);
+				callback(oauth2Client);
+			}
+			else {
+				fs.readFile(TOKEN_PATH, (err, token) => {
 
-				if (err) {
-					this.getNewToken(oauth2Client, callback);
-				} else {
-					oauth2Client.credentials = JSON.parse(token);
-					callback(oauth2Client);
-				}
-			});
+					if (err) {
+						this.getNewToken(oauth2Client, callback);
+					} else {
+						oauth2Client.credentials = JSON.parse(token);
+						callback(oauth2Client);
+					}
+				});
+			}
 	    },
 
 		/**
