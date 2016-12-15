@@ -46,7 +46,9 @@ controller.signupUser = function (req, res, next) {
 controller.showEvents = function(req,res,next){
 	Event.find({})
 		.then(function (foundEvents) {
-				res.render('./partials/eventsSelector', {Events: foundEvents});
+			res.render('./partials/eventsSelector', {Events: foundEvents});
+			//res.render('./partials/eventsSelector', {Events: foundEvents, message: req.flash()});
+			//req.session.flash = [];
 		})
 		.catch(function (err) {
 			next(err);
@@ -67,6 +69,20 @@ controller.showUserEvents = function (req, res, next) {
 };
 
 controller.saveEvent = function (req, res, next) {
+
+	////only add if favorite doesn't already exist
+
+	Favorite.find({user: currentUser.id,event: req.params.id})
+		.then(function (foundEvent) {
+			console.log("Found Event: ", foundEvent);
+			req.flash('info', 'Event already added.');
+			res.redirect('/events');
+			//next();
+		})
+		.catch(function (err) {
+			next(err);
+		})
+
 	let fav = new Favorite({
 		user: currentUser.id,
 		event: req.params.id,
@@ -83,7 +99,6 @@ controller.saveEvent = function (req, res, next) {
 };
 
 controller.deleteFavoriteEvent = function(req,res,next){
-	console.log('B. about to delete favorite with id:', req.params.id);
 	Favorite.remove({_id: req.params.id})
 		.then(function (foundFavorite) {
 			res.redirect('/users');

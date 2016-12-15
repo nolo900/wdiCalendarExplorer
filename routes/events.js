@@ -12,7 +12,6 @@ router.post('/:id', authenticate, function (req, res, next) {
 });
 
 router.delete('/:id', authenticate, function (req, res, next) {
-	console.log('A. about to delete favorite with id:', req.params.id);
 	controller.deleteFavoriteEvent(req,res,next);
 })
 
