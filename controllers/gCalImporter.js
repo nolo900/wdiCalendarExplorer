@@ -3,6 +3,7 @@
 	var fs = require('fs');
 	var readline = require('readline');
 	var google = require('googleapis');
+	var path = require('path');
 	var googleAuth = require('google-auth-library');
 	var calID = "generalassemb.ly_003glv5s4t3ak7p01s6s62pcj4@group.calendar.google.com";
 
@@ -19,19 +20,30 @@
 	let GoogleCalendarImporter = {
 
 		importEvents: function() {
-			// Load client secrets from a local file.
-			fs.readFile('client_secret.json', (err, content) => {
-				if (err) {
-					console.log('Error loading client secret file: ' + err);
-					return;
-				}
-				// Authorize a client with the loaded credentials, then call the
-				// Google Calendar API.
 
-				//this.authorize(JSON.parse(content), this.listEvents);
-				//this.authorize(JSON.parse(content), this.updateCalendarEvent);
-				this.authorize(JSON.parse(content), this.pushGCalEventsToDB);
-			})
+			//Load client secrets from a local file.
+			// fs.readFile('client_secret.json', (err, content) => {
+			// 	if (err) {
+			// 		console.log('Error loading local client secret file: ' + err);
+			// 		return;
+			// 	}
+			// 	// Authorize a client with the loaded credentials, then call the
+			// 	// Google Calendar API.
+			//
+			// 	//this.authorize(JSON.parse(content), this.listEvents);
+			// 	//this.authorize(JSON.parse(content), this.updateCalendarEvent);
+			// 	this.authorize(JSON.parse(content), this.pushGCalEventsToDB);
+			// })
+
+
+
+
+			this.authorize(JSON.parse(process.env.GCAL_CLIENT_SECRET), this.pushGCalEventsToDB);
+
+
+
+
+
 		},
 
 		/**
