@@ -84,11 +84,9 @@ controller.saveEvent = function (req, res, next) {
 
 controller.deleteFavoriteEvent = function(req,res,next){
 	console.log('B. about to delete favorite with id:', req.params.id);
-	Favorite.find({user: global.currentUser.id, event: req.params.id})
-		.then(function (foundFavorites) {
-			console.log("Event about to be deleted: ", foundFavorites);
-			res.redirect('/events');
-			//res.render('./partials/usersEvents', {Favorites: foundFavorites});
+	Favorite.remove({_id: req.params.id})
+		.then(function (foundFavorite) {
+			res.redirect('/users');
 		})
 		.catch(function (err) {
 			next(err);
