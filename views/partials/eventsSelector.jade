@@ -21,7 +21,7 @@ block content
                 td: a(href=item.eventLink target="_blank") Event URL
                 td
                     each n in links
-                        a(href=n)=n
+                        a(href=n target="_blank")=n
                         br
                 td: form(action="/events/" + item.id method='POST')
-                    button(type="submit"):  i.material-icons library_add
+                    button(type="submit"):  i.material-icons add
