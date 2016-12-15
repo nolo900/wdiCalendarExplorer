@@ -22,12 +22,20 @@ https://trello.com/b/fRZCiQ0U/wdi-project-2-wdi-lesson-saver
 
 ### Wirefames/Mockups/Screenshots
 
-![Alt text](/dist/images/WDI-Jeopardy_ScreenShot.png?raw=true "WDI Jeopardy ScreenShot")
+![Alt text](/screenshots/GitSaved_Login.png?raw=true "Git Saved - Login")
+![Alt text](/screenshots/GitSaved_Events.png?raw=true "Git Saved - Events")
+![Alt text](/screenshots/GitSaved_Favorites.png?raw=true "Git Saved - Favorites")
 
 ### Technologies Used
 
-* Materialize CSS Framework -> http://materializecss.com/
+* Node.js --> https://nodejs.org
+* Express.js --> http://expressjs.com/
+* MongoDB --> https://www.mongodb.com/
+* Mongoose --> http://mongoosejs.com/
+* Google Calendar API --> https://developers.google.com/google-apps/calendar/
+* Passport.js --> http://passportjs.org/
+* JQuery Validator --> https://jqueryvalidation.org/
 * JQuery Javascript Library -> https://jquery.com/
-* Accounting.js (Javascript Currency Library) -> https://www.npmjs.com/package/accounting-js
+* Materialize CSS Framework -> http://materializecss.com/
 * PUG HTML Preprocessor -> https://pugjs.org/api/getting-started.html
 * SCSS CSS Preprocessor -> http://sass-lang.com/
