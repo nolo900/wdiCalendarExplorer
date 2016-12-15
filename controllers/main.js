@@ -72,16 +72,17 @@ controller.saveEvent = function (req, res, next) {
 
 	////only add if favorite doesn't already exist
 
-	Favorite.find({user: currentUser.id,event: req.params.id})
-		.then(function (foundEvent) {
-			console.log("Found Event: ", foundEvent);
-			req.flash('info', 'Event already added.');
-			res.redirect('/events');
-			//next();
-		})
-		.catch(function (err) {
-			next(err);
-		})
+	// Favorite.find({user: currentUser.id,event: req.params.id})
+	// 	.then(function (foundEvent) {
+	// 		console.log("Found Event: ", foundEvent);
+	// 		req.flash('info', 'Event already added.');
+	// 		res.redirect('/events');
+	// 		//next();
+	// 	})
+	// 	.catch(function (err) {
+	// 		console.log('save event err: ',err );
+	// 		next(err);
+	// 	})
 
 	let fav = new Favorite({
 		user: currentUser.id,
