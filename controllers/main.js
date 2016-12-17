@@ -43,12 +43,13 @@ controller.signupUser = function (req, res, next) {
 	return signUpStrategy(req,res,next);
 };
 
-controller.showEvents = function(req,res,next){
+controller.showEvents = function (req, res, next){
 	Event.find({})
 		.then(function (foundEvents) {
-			res.render('./partials/eventsSelector', {Events: foundEvents});
-			//res.render('./partials/eventsSelector', {Events: foundEvents, message: req.flash()});
-			//req.session.flash = [];
+			res.render('./partials/eventsSelector', {
+				Events: foundEvents,
+				message: req.flash()
+			});
 		})
 		.catch(function (err) {
 			next(err);
@@ -60,7 +61,10 @@ controller.showUserEvents = function (req, res, next) {
 
 	Favorite.find({user: global.currentUser.id}).populate("event")
 		.then(function (foundFavorites) {
-			res.render('./partials/usersEvents', {Favorites: foundFavorites});
+			res.render('./partials/usersEvents', {
+				Favorites: foundFavorites,
+				message: req.flash()
+			});
 		})
 		.catch(function (err) {
 			next(err);
@@ -69,16 +73,15 @@ controller.showUserEvents = function (req, res, next) {
 };
 
 controller.saveEvent = function (req, res, next) {
-	////only add if favorite doesn't already exist
+	//  Only add if favorite doesn't already exist
 	Favorite.find({user: currentUser.id,event: req.params.id})
 		.then(function (foundEvent) {
 
 			if (foundEvent.length > 0) {
-				console.log("Event already added: ", foundEvent);
-				//req.flash('info', 'Event already added.');
+				req.flash('info', 'Event already added...');
 				res.redirect('/events');
 			} else {
-				// Save Event!
+
 				let fav = new Favorite({
 					user: currentUser.id,
 					event: req.params.id,
@@ -86,6 +89,8 @@ controller.saveEvent = function (req, res, next) {
 
 				fav.save()
 					.then(function (saved) {
+						//req.flash('success', 'Event added to favorites!');
+						//res.redirect('/events');
 						res.redirect('/users');
 					})
 					.catch(function (err) {
@@ -95,14 +100,11 @@ controller.saveEvent = function (req, res, next) {
 
 		})
 		.catch(function (err) {
-			console.log('save event err: ',err );
 			next(err);
 		})
-
-
 };
 
-controller.deleteFavoriteEvent = function(req,res,next){
+controller.deleteFavoriteEvent = function (req,res,next){
 	Favorite.remove({_id: req.params.id})
 		.then(function (foundFavorite) {
 			res.redirect('/users');
