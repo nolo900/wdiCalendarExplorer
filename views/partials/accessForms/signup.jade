@@ -5,7 +5,7 @@ block content
     h3.center-align Signup
     .divider.form-divider
     .row
-        form#signupForm.col.s6.offset-s3(method="POST" action="/signup")
+        form#signupForm(method="POST" action="/signup").col.s12.m6.offset-m6
             .row
                 .input-field.col.s12
                     input(type="email" name="signup_email")#signup_email.validate
