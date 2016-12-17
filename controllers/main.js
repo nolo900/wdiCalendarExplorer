@@ -69,33 +69,36 @@ controller.showUserEvents = function (req, res, next) {
 };
 
 controller.saveEvent = function (req, res, next) {
-
 	////only add if favorite doesn't already exist
+	Favorite.find({user: currentUser.id,event: req.params.id})
+		.then(function (foundEvent) {
 
-	// Favorite.find({user: currentUser.id,event: req.params.id})
-	// 	.then(function (foundEvent) {
-	// 		console.log("Found Event: ", foundEvent);
-	// 		req.flash('info', 'Event already added.');
-	// 		res.redirect('/events');
-	// 		//next();
-	// 	})
-	// 	.catch(function (err) {
-	// 		console.log('save event err: ',err );
-	// 		next(err);
-	// 	})
+			if (foundEvent.length > 0) {
+				console.log("Event already added: ", foundEvent);
+				//req.flash('info', 'Event already added.');
+				res.redirect('/events');
+			} else {
+				// Save Event!
+				let fav = new Favorite({
+					user: currentUser.id,
+					event: req.params.id,
+				});
 
-	let fav = new Favorite({
-		user: currentUser.id,
-		event: req.params.id,
-	});
+				fav.save()
+					.then(function (saved) {
+						res.redirect('/users');
+					})
+					.catch(function (err) {
+						next(err);
+					});
+			}
 
-	fav.save()
-		.then(function (saved) {
-			res.redirect('/users');
 		})
 		.catch(function (err) {
+			console.log('save event err: ',err );
 			next(err);
-		});
+		})
+
 
 };
 
