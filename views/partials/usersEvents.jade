@@ -3,6 +3,8 @@ extends ../layout
 
 block content
 
+    h3.center-align Favorites
+    hr
     table.bordered.responsive-table
         thead
             tr
@@ -25,5 +27,5 @@ block content
                             a(href=n target="_blank")=n
                             br
                     td: form(action="/events/" + item.id + "?_method=DELETE" method='POST')
-                        button.btn(type="submit"):  i.material-icons delete
+                        button.btn.waves-effect.waves-light.red(type="submit"):  i.material-icons delete
             - }

@@ -3,6 +3,8 @@ extends ../layout
 
 block content
 
+    h3.center-align All Events
+    hr
     table.bordered.responsive-table
         thead
             tr
@@ -24,4 +26,4 @@ block content
                         a(href=n target="_blank")=n
                         br
                 td: form(action="/events/" + item.id method='POST')
-                    button.btn(type="submit"):  i.material-icons library_add
+                    button.btn.waves-effect.waves-light(type="submit"):  i.material-icons library_add
