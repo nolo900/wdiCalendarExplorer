@@ -17,17 +17,6 @@
 		process.env.USERPROFILE) + '/.credentials/';
 	var TOKEN_PATH = TOKEN_DIR + 'calendar-nodejs-quickstart.json';
 
-	global.existsInCollection = function(eventId) {
-		Event.find({gCalEventId: eventId})
-			.then(function (foundEvent) {
-				console.log("Found Event: ", foundEvent);
-				return (foundEvent.length > 0);
-			})
-			.catch(function (err) {
-				console.log("Error during checking if event already exists...", err);
-				return true;
-			});
-	}
 
 	let GoogleCalendarImporter = {
 
@@ -200,26 +189,34 @@
 						//add to DB
 						//if event has a desc that contains a link then save it in the database
 						// check event ID and only append if it doesn't already exist
-						if( event.description &&
-							event.description.match(/(([htps]+:)\/{2}(([\w\d\.]+):([\w\d\.]+))?@?(([a-zA-Z0-9\.\-_]+)(?::(\d{1,5}))?))?(\/(?:[a-zA-Z0-9\.\-\/\+\%]+)?)(?:\?([a-zA-Z0-9=%\-_\.\*&;]+))?(?:#([a-zA-Z0-9\-=,&%;\/\\"'\?]+)?)?/g) &&
-							!global.existsInCollection(event.id)
-							) {
-							console.log('Saving: ', event.id);
-							var links = event.description.match(/(([htps]+:)\/{2}(([\w\d\.]+):([\w\d\.]+))?@?(([a-zA-Z0-9\.\-_]+)(?::(\d{1,5}))?))?(\/(?:[a-zA-Z0-9\.\-\/\+\%]+)?)(?:\?([a-zA-Z0-9=%\-_\.\*&;]+))?(?:#([a-zA-Z0-9\-=,&%;\/\\"'\?]+)?)?/g);
 
-							var dbCalEvent = new Event({
-								gCalEventId: event.id,
-								title: event.summary,
-								dateTime: event.start.dateTime || event.start.date,
-								description: event.description,
-								eventLink: event.htmlLink,
-								extractedlinks: links
+						Event.findOne({gCalEventId: event.id})
+							.then(function (foundEvent) {
+
+								if (foundEvent === null &&
+									event.description &&
+									event.description.match(/(([htps]+:)\/{2}(([\w\d\.]+):([\w\d\.]+))?@?(([a-zA-Z0-9\.\-_]+)(?::(\d{1,5}))?))?(\/(?:[a-zA-Z0-9\.\-\/\+\%]+)?)(?:\?([a-zA-Z0-9=%\-_\.\*&;]+))?(?:#([a-zA-Z0-9\-=,&%;\/\\"'\?]+)?)?/g)
+									) {
+									console.log('Saving: ', event.id);
+									var links = event.description.match(/(([htps]+:)\/{2}(([\w\d\.]+):([\w\d\.]+))?@?(([a-zA-Z0-9\.\-_]+)(?::(\d{1,5}))?))?(\/(?:[a-zA-Z0-9\.\-\/\+\%]+)?)(?:\?([a-zA-Z0-9=%\-_\.\*&;]+))?(?:#([a-zA-Z0-9\-=,&%;\/\\"'\?]+)?)?/g);
+
+									var dbCalEvent = new Event({
+										gCalEventId: event.id,
+										title: event.summary,
+										dateTime: event.start.dateTime || event.start.date,
+										description: event.description,
+										eventLink: event.htmlLink,
+										extractedlinks: links
+									});
+
+									dbCalEvent.save();
+								}
+
+							})
+							.catch(function (err) {
+								console.log("Error during checking if event already exists...", err.message);
 							});
 
-							dbCalEvent.save();
-						} else {
-							console.log("Event skipped: ", event.id);
-						}
 
 					});
 
