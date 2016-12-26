@@ -17,6 +17,18 @@
 		process.env.USERPROFILE) + '/.credentials/';
 	var TOKEN_PATH = TOKEN_DIR + 'calendar-nodejs-quickstart.json';
 
+	global.existsInCollection = function(eventId) {
+		Event.find({gCalEventId: eventId})
+			.then(function (foundEvent) {
+				console.log("Found Event: ", foundEvent);
+				return (foundEvent.length > 0);
+			})
+			.catch(function (err) {
+				console.log("Error during checking if event already exists...", err);
+				return true;
+			});
+	}
+
 	let GoogleCalendarImporter = {
 
 		importEvents: function() {
@@ -163,7 +175,9 @@
 		},
 
 		pushGCalEventsToDB: function(auth){
+			var that = this;
 			var calendar = google.calendar('v3');
+
 			calendar.events.list({
 				auth: auth,
 				calendarId: calID,
@@ -182,47 +196,68 @@
 				if (events.length == 0) {
 					console.log('Can\'t push events to DB, No upcoming events found.');
 				} else {
+					events.forEach(function (event) {
+						//add to DB
+						//if event has a desc that contains a link then save it in the database
+						// check event ID and only append if it doesn't already exist
+						if( event.description &&
+							event.description.match(/(([htps]+:)\/{2}(([\w\d\.]+):([\w\d\.]+))?@?(([a-zA-Z0-9\.\-_]+)(?::(\d{1,5}))?))?(\/(?:[a-zA-Z0-9\.\-\/\+\%]+)?)(?:\?([a-zA-Z0-9=%\-_\.\*&;]+))?(?:#([a-zA-Z0-9\-=,&%;\/\\"'\?]+)?)?/g) &&
+							!global.existsInCollection(event.id)
+							) {
+							console.log('Saving: ', event.id);
+							var links = event.description.match(/(([htps]+:)\/{2}(([\w\d\.]+):([\w\d\.]+))?@?(([a-zA-Z0-9\.\-_]+)(?::(\d{1,5}))?))?(\/(?:[a-zA-Z0-9\.\-\/\+\%]+)?)(?:\?([a-zA-Z0-9=%\-_\.\*&;]+))?(?:#([a-zA-Z0-9\-=,&%;\/\\"'\?]+)?)?/g);
 
-					Event.remove({},function(){
-						console.log("All Events Deleted...");
+							var dbCalEvent = new Event({
+								gCalEventId: event.id,
+								title: event.summary,
+								dateTime: event.start.dateTime || event.start.date,
+								description: event.description,
+								eventLink: event.htmlLink,
+								extractedlinks: links
+							});
 
-						console.log('Saving Events in DB...');
-						for (var i = 0; i < events.length; i++) {
-							var event = events[i];
-							//if event has a desc that contains a link then save it in the database
-							console.log('Saving: ', i, event.id);
-
-							if(event.description && event.description.match(/(([htps]+:)\/{2}(([\w\d\.]+):([\w\d\.]+))?@?(([a-zA-Z0-9\.\-_]+)(?::(\d{1,5}))?))?(\/(?:[a-zA-Z0-9\.\-\/\+\%]+)?)(?:\?([a-zA-Z0-9=%\-_\.\*&;]+))?(?:#([a-zA-Z0-9\-=,&%;\/\\"'\?]+)?)?/g)){
-								console.log('Saving: ', i, event.id);
-								var links = event.description.match(/(([htps]+:)\/{2}(([\w\d\.]+):([\w\d\.]+))?@?(([a-zA-Z0-9\.\-_]+)(?::(\d{1,5}))?))?(\/(?:[a-zA-Z0-9\.\-\/\+\%]+)?)(?:\?([a-zA-Z0-9=%\-_\.\*&;]+))?(?:#([a-zA-Z0-9\-=,&%;\/\\"'\?]+)?)?/g);
-
-								var dbCalEvent = new Event({
-									gCalEventId: event.id,
-									title: event.summary,
-									dateTime: event.start.dateTime || event.start.date,
-									description: event.description,
-									eventLink: event.htmlLink,
-									extractedlinks: links
-								});
-
-								dbCalEvent.save();
-							}
-
+							dbCalEvent.save();
+						} else {
+							console.log("Event skipped: ", event.id);
 						}
 
 					});
+
+					// ----- OLD CODE THAT WIPES COLLECTION AND BUILDS FROM SCRATCH ---------------
+					// Event.remove({},function(){
+					// 	console.log("All Events Deleted...");
+					//
+					// 	console.log('Saving Events in DB...');
+					// 	for (var i = 0; i < events.length; i++) {
+					// 		var event = events[i];
+					// 		//if event has a desc that contains a link then save it in the database
+					// 		console.log('Saving: ', i, event.id);
+					//
+					// 		if(event.description && event.description.match(/(([htps]+:)\/{2}(([\w\d\.]+):([\w\d\.]+))?@?(([a-zA-Z0-9\.\-_]+)(?::(\d{1,5}))?))?(\/(?:[a-zA-Z0-9\.\-\/\+\%]+)?)(?:\?([a-zA-Z0-9=%\-_\.\*&;]+))?(?:#([a-zA-Z0-9\-=,&%;\/\\"'\?]+)?)?/g)){
+					// 			console.log('Saving: ', i, event.id);
+					// 			var links = event.description.match(/(([htps]+:)\/{2}(([\w\d\.]+):([\w\d\.]+))?@?(([a-zA-Z0-9\.\-_]+)(?::(\d{1,5}))?))?(\/(?:[a-zA-Z0-9\.\-\/\+\%]+)?)(?:\?([a-zA-Z0-9=%\-_\.\*&;]+))?(?:#([a-zA-Z0-9\-=,&%;\/\\"'\?]+)?)?/g);
+					//
+					// 			var dbCalEvent = new Event({
+					// 				gCalEventId: event.id,
+					// 				title: event.summary,
+					// 				dateTime: event.start.dateTime || event.start.date,
+					// 				description: event.description,
+					// 				eventLink: event.htmlLink,
+					// 				extractedlinks: links
+					// 			});
+					//
+					// 			dbCalEvent.save();
+					// 		}
+					//
+					// 	}
+					//
+					// });
 
 				}
 			});
 		}
 
 	}
-
-
-
-
-
-
 
 
 // function updateCalendarEvent(auth){
