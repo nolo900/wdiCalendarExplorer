@@ -44,7 +44,7 @@ controller.signupUser = function (req, res, next) {
 };
 
 controller.showEvents = function (req, res, next){
-	Event.find({})
+	Event.find({}).sort({'dateTime': 1})
 		.then(function (foundEvents) {
 			res.render('./partials/eventsSelector', {
 				Events: foundEvents,
@@ -57,7 +57,6 @@ controller.showEvents = function (req, res, next){
 };
 
 controller.showUserEvents = function (req, res, next) {
-	console.log(global.currentUser.id);
 
 	Favorite.find({user: global.currentUser.id}).populate("event")
 		.then(function (foundFavorites) {
