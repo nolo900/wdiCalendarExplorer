@@ -164,7 +164,7 @@
 		},
 
 		pushGCalEventsToDB: function(auth){
-			var that = this;
+
 			var calendar = google.calendar('v3');
 
 			calendar.events.list({
@@ -172,8 +172,8 @@
 				calendarId: calID,
 				//timeMin: (new Date()).toISOString(),
 				timeMin: '2016-10-31T00:00:00-05:00',
-				timeMax: '2017-03-01T00:00:00-05:00',
-				// maxResults: 100,
+				// timeMax: '2017-03-01T00:00:00-05:00',
+				maxResults: 9999,
 				singleEvents: true,
 				orderBy: 'startTime'
 			}, (err, response) => {
