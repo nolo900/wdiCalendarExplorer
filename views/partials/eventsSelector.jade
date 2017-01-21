@@ -4,7 +4,12 @@ extends ../layout
 block content
 
     h3.center-align All Lessons
-    hr
+
+
+    .row
+        .col.s12.m6.offset-m3.center-align
+            input#searchField(type="text" placeholder="Search Events").center-align
+
     table.bordered.responsive-table
         thead
             tr
@@ -27,3 +32,6 @@ block content
                         br
                 td: form(action="/events/" + item.id method='POST')
                     button.btn.waves-effect.waves-light(type="submit"):  i.material-icons library_add
+
+
+

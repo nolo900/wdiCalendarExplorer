@@ -54,3 +54,12 @@ $( document ).ready(function(){
 	});
 
 })
+
+$("#searchField").on('keyup click input', function () {
+	$("*").show();
+	if (this.value.length > 0){
+		$("tr").not(function(){
+			return $(this).text().toLowerCase().indexOf($("#searchField").val().toLowerCase()) != -1;
+		}).hide();
+	}
+});

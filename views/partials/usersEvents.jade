@@ -4,7 +4,9 @@ extends ../layout
 block content
 
     h3.center-align Favorites
-    hr
+    .row
+        .col.s12.m6.offset-m3.center-align
+            input#searchField(type="text" placeholder="Search Events").center-align
     table.bordered.responsive-table
         thead
             tr
